@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter Tight', sans-serif;
+}
+
+.quiz {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #002fffde;
+    backdrop-filter: blur(10px);
+    padding: 1.5rem;
+}
+
+.quiz .quiz-title {
+    font-size: 5rem;
+    color: #fff;
+    margin-bottom: 1rem;
+    letter-spacing: 2px;
+    font-weight: 700;
+}
+
+.quiz .quiz-question {
+    font-size: 1.2rem;
+    color: #fff;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.quiz .quiz-choices {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #fff;
+    border-radius: 15px;
+    padding: 0.4rem;
+}
+
+
+.jogo-da-memoria{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #002fffde;
+    backdrop-filter: blur(10px);
+    padding: 1.5rem;
+}
+
+.jogo-da-memoria h2 {
+    font-size: 2rem;
+    color: #fff;
+    margin-bottom: 1rem;
+    letter-spacing: 2px;
+    font-weight: 700;
+}
+
+.jogo-da-memoria .memoria-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+
+.jogo-da-memoria .memoria-grid .memoria-card {
+    cursor: pointer;
+    padding: 0.6rem;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+    height: 10em;
+    width: 10em;
+}

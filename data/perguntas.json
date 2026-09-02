@@ -1,0 +1,82 @@
+[
+  {
+    "pergunta": "Qual era o nome da iniciativa criada para reunir indivíduos capazes de proteger a Terra?",
+    "alternativas": ["Iniciativa Vingadores", "Projeto Insight", "Projeto P.E.G.A.S.U.S.", "Iniciativa Ultron"],
+    "resposta": "Iniciativa Vingadores"
+  },
+  {
+    "pergunta": "Qual Joia do Infinito estava escondida dentro do Orbe que Peter Quill rouba?",
+    "alternativas": ["Joia do Poder", "Joia da Realidade", "Joia da Alma", "Joia do Espaço"],
+    "resposta": "Joia do Poder"
+  },
+  {
+    "pergunta": "Qual era o nome da inteligência artificial criada por Tony Stark que posteriormente recebeu um corpo sintético?",
+    "alternativas": ["JARVIS", "FRIDAY", "KAREN", "EDITH"],
+    "resposta": "JARVIS"
+  },
+  {
+    "pergunta": "Qual personagem estava usando a identidade de 'Mercúrio' nos acontecimentos de Vingadores: Era de Ultron?",
+    "alternativas": ["Pietro Maximoff", "Bucky Barnes", "Clint Barton", "Sam Wilson"],
+    "resposta": "Pietro Maximoff"
+  },
+  {
+    "pergunta": "Em qual local Thor encontra a visão de uma possível destruição de Asgard?",
+    "alternativas": ["Niflheim", "Muspelheim", "Vanaheim", "Jotunheim"],
+    "resposta": "Niflheim"
+  },
+  {
+    "pergunta": "Qual era o nome do programa de treinamento ao qual Natasha Romanoff foi submetida?",
+    "alternativas": ["Sala Vermelha", "Projeto Insight", "Programa Centelha", "Iniciativa Viúva"],
+    "resposta": "Sala Vermelha"
+  },
+  {
+    "pergunta": "Quem foi responsável por colocar a Joia da Mente no cetro utilizado por Loki?",
+    "alternativas": ["Thanos", "Ronan", "Ultron", "O Colecionador"],
+    "resposta": "Thanos"
+  },
+  {
+    "pergunta": "Qual era o nome da nave dos Guardiões que aparece em Vingadores: Guerra Infinita?",
+    "alternativas": ["Milano", "Benatar", "Sanctuary II", "Quadrante"],
+    "resposta": "Benatar"
+  },
+  {
+    "pergunta": "Qual personagem percebe primeiro que a realidade em que os Vingadores estão pode estar sendo alterada por Wanda em WandaVision?",
+    "alternativas": ["Doutor Estranho", "Monica Rambeau", "Wong", "Visão"],
+    "resposta": "Monica Rambeau"
+  },
+  {
+    "pergunta": "Qual era o nome do planeta onde Thanos enfrentou os Vingadores em Guerra Infinita?",
+    "alternativas": ["Titan", "Vormir", "Sakaar", "Knowhere"],
+    "resposta": "Titan"
+  },
+  {
+    "pergunta": "Qual personagem entrega a Tony Stark as informações sobre a localização de Thanos após a batalha em Titan?",
+    "alternativas": ["Nebulosa", "Gamora", "Rocket", "Doutor Estranho"],
+    "resposta": "Nebulosa"
+  },
+  {
+    "pergunta": "Qual Joia estava originalmente na testa do Visão?",
+    "alternativas": ["Joia da Mente", "Joia do Espaço", "Joia da Realidade", "Joia do Tempo"],
+    "resposta": "Joia da Mente"
+  },
+  {
+    "pergunta": "Qual personagem foi responsável por guardar a Joia da Alma em Vormir?",
+    "alternativas": ["Caveira Vermelha", "Eitri", "Thanos", "Heimdall"],
+    "resposta": "Caveira Vermelha"
+  },
+  {
+    "pergunta": "Qual era o nome da instalação onde os Vingadores mantinham Loki após sua captura?",
+    "alternativas": ["Helicarrier", "Torre dos Vingadores", "Base de Nova Jersey", "Quartel da S.H.I.E.L.D."],
+    "resposta": "Helicarrier"
+  },
+  {
+    "pergunta": "Qual personagem foi responsável por criar o novo corpo de Visão utilizando tecnologia de Wakanda?",
+    "alternativas": ["Shuri", "T'Challa", "Okoye", "M'Baku"],
+    "resposta": "Shuri"
+  },
+  {
+    "pergunta": "Em Vingadores: Ultimato, qual era a quantidade de anos que havia passado desde o estalo de Thanos?",
+    "alternativas": ["3 anos", "4 anos", "5 anos", "6 anos"],
+    "resposta": "5 anos"
+  }
+]
