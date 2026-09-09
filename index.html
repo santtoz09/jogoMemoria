@@ -10,7 +10,7 @@
   <main>
     <section class="quiz" aria-labelledby="quiz-title">
       <h1 id="quiz-title" class="quiz-title">Quiz</h1>
-      <p class="quiz-question" aria-live="polite">Carregando pergunta...</p>
+      <p id="quiz-question" class="quiz-question" aria-live="polite">Carregando pergunta...</p>
       <div id="quiz-choices" class="quiz-choices" aria-label="Alternativas da pergunta"></div>
       <p id="quiz-feedback" class="quiz-feedback" aria-live="polite"></p>
       <p id="quiz-score" class="quiz-score" aria-live="polite"></p>
@@ -20,18 +20,13 @@
       </div>
     </section>
 
-    <section class="jogo-da-memoria is-locked" aria-labelledby="memory-title" aria-disabled="true">
+    <section id="memory-game" class="jogo-da-memoria is-locked" aria-labelledby="memory-title" aria-disabled="true">
       <h2 id="memory-title" class="memoria-title">Jogo da Memória</h2>
       <p id="memory-status" class="memory-status" aria-live="polite">Jogo da memória bloqueado: acerte uma pergunta para jogar.</p>
-      <div class="memoria-grid" aria-label="Cartas do jogo da memória">
-        <div class="memoria-card" aria-hidden="true"></div><div class="memoria-card" aria-hidden="true"></div>
-        <div class="memoria-card" aria-hidden="true"></div><div class="memoria-card" aria-hidden="true"></div>
-        <div class="memoria-card" aria-hidden="true"></div><div class="memoria-card" aria-hidden="true"></div>
-        <div class="memoria-card" aria-hidden="true"></div><div class="memoria-card" aria-hidden="true"></div>
-        <div class="memoria-card" aria-hidden="true"></div><div class="memoria-card" aria-hidden="true"></div>
-      </div>
+      <div id="memory-grid" class="memoria-grid" aria-label="Cartas do jogo da memória"></div>
     </section>
   </main>
-  <script src="./js/index.js"></script>
+  <script src="./js/jogo-memoria.js"></script>
+  <script src="./js/quiz.js"></script>
 </body>
 </html>
