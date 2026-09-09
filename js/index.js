@@ -1,162 +1,178 @@
-const questionText = document.getElementById('quiz-question');
-const choices = document.getElementById('quiz-choices');
-const feedback = document.getElementById('quiz-feedback');
-const score = document.getElementById('quiz-score');
-const nextButton = document.getElementById('quiz-next');
-const restartButton = document.getElementById('quiz-restart');
-const memoryGame = document.getElementById('memory-game');
-const memoryGrid = document.getElementById('memory-grid');
-const memoryStatus = document.getElementById('memory-status');
+// Primeiro pegamos os elementos do HTML que vamos mudar.
+const tela = {
+  pergunta: document.getElementById('quiz-question'),
+  alternativas: document.getElementById('quiz-choices'),
+  mensagem: document.getElementById('quiz-feedback'),
+  placar: document.getElementById('quiz-score'),
+  proxima: document.getElementById('quiz-next'),
+  reiniciar: document.getElementById('quiz-restart'),
+  jogo: document.getElementById('memory-game'),
+  cartas: document.getElementById('memory-grid'),
+  status: document.getElementById('memory-status'),
+};
 
-let questions = [];
-let cards = [];
-let questionNumber = 0;
-let correctAnswers = 0;
-let firstCard = null;
-let pairsFound = 0;
-let locked = false;
-let gameStarted = false;
+let perguntas = [];
+let herois = [];
+let numeroDaPergunta = 0;
+let acertos = 0;
+let primeiraCarta = null;
+let paresEncontrados = 0;
+let podeVirarCarta = true;
+let jogoIniciado = false;
 
-fetch('./data/perguntas.json')
-  .then((response) => response.json())
-  .then((data) => {
-    questions = data;
-    showQuestion();
-  });
+// O "await" espera os dois arquivos JSON serem carregados antes de começar.
+async function iniciar() {
+  [perguntas, herois] = await Promise.all([
+    buscarDados('./data/perguntas.json'),
+    buscarDados('./data/cards.json'),
+  ]);
 
-fetch('./data/cards.json')
-  .then((response) => response.json())
-  .then((data) => {
-    cards = data;
-    if (!memoryGame.classList.contains('is-locked')) startMemoryGame();
-  });
+  mostrarPergunta();
+}
 
-function showQuestion() {
-  const question = questions[questionNumber];
+async function buscarDados(caminho) {
+  const resposta = await fetch(caminho);
+  return resposta.json();
+}
 
-  if (!question) {
-    questionText.textContent = 'Quiz finalizado!';
-    score.textContent = `Você acertou ${correctAnswers} perguntas.`;
-    restartButton.hidden = false;
+function mostrarPergunta() {
+  const perguntaAtual = perguntas[numeroDaPergunta];
+
+  // Se não existir outra pergunta, o quiz acabou.
+  if (!perguntaAtual) {
+    tela.pergunta.textContent = 'Quiz finalizado!';
+    tela.placar.textContent = `Você acertou ${acertos} perguntas.`;
+    tela.reiniciar.hidden = false;
     return;
   }
 
-  choices.innerHTML = '';
-  feedback.textContent = '';
-  nextButton.hidden = true;
-  questionText.textContent = question.pergunta;
-  score.textContent = `Pergunta ${questionNumber + 1} de ${questions.length}`;
+  tela.alternativas.innerHTML = '';
+  tela.mensagem.textContent = '';
+  tela.proxima.hidden = true;
+  tela.pergunta.textContent = perguntaAtual.pergunta;
+  tela.placar.textContent = `Pergunta ${numeroDaPergunta + 1} de ${perguntas.length}`;
 
-  question.alternativas.forEach((alternative) => {
-    const button = document.createElement('button');
-    button.textContent = alternative;
-    button.className = 'quiz-choice';
-    button.onclick = () => answerQuestion(alternative);
-    choices.appendChild(button);
+  perguntaAtual.alternativas.forEach((alternativa) => {
+    const botao = document.createElement('button');
+    botao.className = 'quiz-choice';
+    botao.textContent = alternativa;
+    botao.onclick = () => responder(alternativa);
+    tela.alternativas.appendChild(botao);
   });
 }
 
-function answerQuestion(answer) {
-  const question = questions[questionNumber];
-  const buttons = choices.getElementsByTagName('button');
+function responder(alternativa) {
+  const perguntaAtual = perguntas[numeroDaPergunta];
 
-  for (let index = 0; index < buttons.length; index += 1) {
-    buttons[index].disabled = true;
+  // Depois da escolha, os botões ficam desativados.
+  for (const botao of tela.alternativas.children) {
+    botao.disabled = true;
   }
 
-  if (answer === question.resposta) {
-    correctAnswers += 1;
-    feedback.textContent = 'Correto! O jogo da memória foi desbloqueado.';
-    feedback.className = 'quiz-feedback is-correct';
-    unlockMemoryGame();
+  if (alternativa === perguntaAtual.resposta) {
+    acertos += 1;
+    tela.mensagem.textContent = 'Correto! O jogo da memória foi desbloqueado.';
+    tela.mensagem.className = 'quiz-feedback is-correct';
+    desbloquearJogo();
   } else {
-    feedback.textContent = `A resposta correta é: ${question.resposta}.`;
-    feedback.className = 'quiz-feedback is-incorrect';
+    tela.mensagem.textContent = `A resposta correta é: ${perguntaAtual.resposta}.`;
+    tela.mensagem.className = 'quiz-feedback is-incorrect';
   }
 
-  nextButton.hidden = false;
+  tela.proxima.hidden = false;
 }
 
-function unlockMemoryGame() {
-  memoryGame.classList.remove('is-locked');
-  memoryGame.removeAttribute('aria-disabled');
+function desbloquearJogo() {
+  tela.jogo.classList.remove('is-locked');
+  tela.jogo.removeAttribute('aria-disabled');
 
-  if (!gameStarted && cards.length > 0) {
-    startMemoryGame();
+  if (!jogoIniciado) {
+    criarJogoDaMemoria();
   }
 }
 
-function startMemoryGame() {
-  const chosenCards = cards.slice(0, 5);
-  const deck = chosenCards.concat(chosenCards);
+function criarJogoDaMemoria() {
+  // Escolhemos 5 heróis, duplicamos as cartas e as misturamos.
+  const cincoHerois = herois.slice(0, 5);
+  const baralho = [...cincoHerois, ...cincoHerois];
+  baralho.sort(() => Math.random() - 0.5);
 
-  deck.sort(() => Math.random() - 0.5);
-  memoryGrid.innerHTML = '';
-  firstCard = null;
-  pairsFound = 0;
-  locked = false;
-  gameStarted = true;
+  tela.cartas.innerHTML = '';
+  primeiraCarta = null;
+  paresEncontrados = 0;
+  podeVirarCarta = true;
+  jogoIniciado = true;
 
-  deck.forEach((card) => {
-    const button = document.createElement('button');
-    button.className = 'memoria-card';
-    button.dataset.id = card.id;
-    button.innerHTML = `<img src="${card.imagem.replace('../', '')}" alt="${card.nome}">`;
-    button.onclick = () => flipCard(button);
-    memoryGrid.appendChild(button);
+  baralho.forEach((heroi) => {
+    const carta = document.createElement('button');
+    const imagem = document.createElement('img');
+
+    carta.className = 'memoria-card';
+    carta.dataset.id = heroi.id;
+    carta.onclick = () => virarCarta(carta);
+    imagem.src = heroi.imagem.replace('../', '');
+    imagem.alt = heroi.nome;
+
+    carta.appendChild(imagem);
+    tela.cartas.appendChild(carta);
   });
 
-  memoryStatus.textContent = 'Encontre os 5 pares de heróis.';
+  tela.status.textContent = 'Encontre os 5 pares de heróis.';
 }
 
-function flipCard(card) {
-  if (locked || card === firstCard || card.classList.contains('is-matched')) return;
+function virarCarta(carta) {
+  // Não vira carta enquanto duas cartas erradas estão aparecendo.
+  if (!podeVirarCarta || carta === primeiraCarta || carta.classList.contains('is-matched')) return;
 
-  card.classList.add('is-flipped');
+  carta.classList.add('is-flipped');
 
-  if (!firstCard) {
-    firstCard = card;
+  // A primeira carta apenas fica guardada para comparar com a próxima.
+  if (!primeiraCarta) {
+    primeiraCarta = carta;
     return;
   }
 
-  if (firstCard.dataset.id === card.dataset.id) {
-    firstCard.classList.add('is-matched');
-    card.classList.add('is-matched');
-    firstCard.disabled = true;
-    card.disabled = true;
-    pairsFound += 1;
-    firstCard = null;
+  if (primeiraCarta.dataset.id === carta.dataset.id) {
+    primeiraCarta.classList.add('is-matched');
+    carta.classList.add('is-matched');
+    primeiraCarta.disabled = true;
+    carta.disabled = true;
+    primeiraCarta = null;
+    paresEncontrados += 1;
 
-    if (pairsFound === 5) {
-      memoryStatus.textContent = 'Parabéns! Você encontrou todos os pares.';
+    if (paresEncontrados === 5) {
+      tela.status.textContent = 'Parabéns! Você encontrou todos os pares.';
     }
     return;
   }
 
-  locked = true;
-  const secondCard = card;
+  // Se forem diferentes, esperamos um pouco e escondemos as duas.
+  podeVirarCarta = false;
+  const segundaCarta = carta;
 
   setTimeout(() => {
-    firstCard.classList.remove('is-flipped');
-    secondCard.classList.remove('is-flipped');
-    firstCard = null;
-    locked = false;
+    primeiraCarta.classList.remove('is-flipped');
+    segundaCarta.classList.remove('is-flipped');
+    primeiraCarta = null;
+    podeVirarCarta = true;
   }, 800);
 }
 
-nextButton.onclick = () => {
-  questionNumber += 1;
-  showQuestion();
+tela.proxima.onclick = () => {
+  numeroDaPergunta += 1;
+  mostrarPergunta();
 };
 
-restartButton.onclick = () => {
-  questionNumber = 0;
-  correctAnswers = 0;
-  gameStarted = false;
-  memoryGrid.innerHTML = '';
-  memoryGame.classList.add('is-locked');
-  memoryGame.setAttribute('aria-disabled', 'true');
-  memoryStatus.textContent = 'Jogo da memória bloqueado: acerte uma pergunta para jogar.';
-  restartButton.hidden = true;
-  showQuestion();
+tela.reiniciar.onclick = () => {
+  numeroDaPergunta = 0;
+  acertos = 0;
+  jogoIniciado = false;
+  tela.cartas.innerHTML = '';
+  tela.jogo.classList.add('is-locked');
+  tela.jogo.setAttribute('aria-disabled', 'true');
+  tela.status.textContent = 'Jogo da memória bloqueado: acerte uma pergunta para jogar.';
+  tela.reiniciar.hidden = true;
+  mostrarPergunta();
 };
+
+iniciar();
