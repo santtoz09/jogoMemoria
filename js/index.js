@@ -1,108 +1,162 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const questionEl = document.querySelector('.quiz-question');
-  const choicesEl = document.getElementById('quiz-choices');
-  const nextBtn = document.getElementById('quiz-next');
-  const restartBtn = document.getElementById('quiz-restart');
-  const feedbackEl = document.getElementById('quiz-feedback');
-  const scoreEl = document.getElementById('quiz-score');
-  const memorySection = document.querySelector('.jogo-da-memoria');
-  const memoryStatus = document.getElementById('memory-status');
+const questionText = document.getElementById('quiz-question');
+const choices = document.getElementById('quiz-choices');
+const feedback = document.getElementById('quiz-feedback');
+const score = document.getElementById('quiz-score');
+const nextButton = document.getElementById('quiz-next');
+const restartButton = document.getElementById('quiz-restart');
+const memoryGame = document.getElementById('memory-game');
+const memoryGrid = document.getElementById('memory-grid');
+const memoryStatus = document.getElementById('memory-status');
 
-  let questions = [];
-  let currentQuestion = 0;
-  let correctAnswers = 0;
+let questions = [];
+let cards = [];
+let questionNumber = 0;
+let correctAnswers = 0;
+let firstCard = null;
+let pairsFound = 0;
+let locked = false;
+let gameStarted = false;
 
-  fetch('./data/perguntas.json')
-    .then((response) => {
-      if (!response.ok) throw new Error('Não foi possível carregar as perguntas.');
-      return response.json();
-    })
-    .then((data) => {
-      if (!Array.isArray(data)) throw new Error('Formato de perguntas inválido.');
-      questions = data;
-      renderQuestion();
-    })
-    .catch(() => {
-      questionEl.textContent = 'Erro ao carregar as perguntas.';
-      feedbackEl.textContent = 'Atualize a página para tentar novamente.';
-    });
-
-  function renderQuestion() {
-    choicesEl.replaceChildren();
-    feedbackEl.textContent = '';
-    nextBtn.hidden = true;
-    restartBtn.hidden = true;
-
-    if (currentQuestion >= questions.length) {
-      questionEl.textContent = 'Quiz finalizado!';
-      scoreEl.textContent = `Você acertou ${correctAnswers} de ${questions.length} perguntas.`;
-      restartBtn.hidden = false;
-      return;
-    }
-
-    const question = questions[currentQuestion];
-    questionEl.textContent = question.pergunta || 'Pergunta indisponível.';
-    scoreEl.textContent = `Pergunta ${currentQuestion + 1} de ${questions.length}`;
-
-    (question.alternativas || []).forEach((alternative) => {
-      const choiceBtn = document.createElement('button');
-      choiceBtn.type = 'button';
-      choiceBtn.className = 'quiz-choice';
-      choiceBtn.textContent = alternative;
-      choiceBtn.addEventListener('click', () => answerQuestion(question, alternative));
-      choicesEl.appendChild(choiceBtn);
-    });
-  }
-
-  function answerQuestion(question, answer) {
-    const isCorrect = normalize(answer) === normalize(question.resposta);
-    const choiceButtons = choicesEl.querySelectorAll('button');
-
-    choiceButtons.forEach((button) => {
-      button.disabled = true;
-      if (normalize(button.textContent) === normalize(question.resposta)) {
-        button.classList.add('is-correct');
-      }
-    });
-
-    if (isCorrect) {
-      correctAnswers += 1;
-      feedbackEl.textContent = 'Correto! O jogo da memória foi desbloqueado.';
-      feedbackEl.className = 'quiz-feedback is-correct';
-      unlockMemoryGame();
-    } else {
-      feedbackEl.textContent = `Resposta incorreta. A resposta correta é: ${question.resposta}.`;
-      feedbackEl.className = 'quiz-feedback is-incorrect';
-      if (memorySection.classList.contains('is-locked')) {
-        memoryStatus.textContent = 'Jogo da memória bloqueado: acerte uma pergunta para jogar.';
-      }
-    }
-
-    nextBtn.hidden = false;
-    scoreEl.textContent = `Pergunta ${currentQuestion + 1} de ${questions.length} · Acertos: ${correctAnswers}`;
-  }
-
-  function unlockMemoryGame() {
-    memorySection.classList.remove('is-locked');
-    memorySection.removeAttribute('aria-disabled');
-    memoryStatus.textContent = 'Jogo da memória desbloqueado! Você já pode tentar jogar.';
-  }
-
-  function normalize(value) {
-    return String(value || '').trim().toLocaleLowerCase('pt-BR');
-  }
-
-  nextBtn.addEventListener('click', () => {
-    currentQuestion += 1;
-    renderQuestion();
+fetch('./data/perguntas.json')
+  .then((response) => response.json())
+  .then((data) => {
+    questions = data;
+    showQuestion();
   });
 
-  restartBtn.addEventListener('click', () => {
-    currentQuestion = 0;
-    correctAnswers = 0;
-    memorySection.classList.add('is-locked');
-    memorySection.setAttribute('aria-disabled', 'true');
-    memoryStatus.textContent = 'Jogo da memória bloqueado: acerte uma pergunta para jogar.';
-    renderQuestion();
+fetch('./data/cards.json')
+  .then((response) => response.json())
+  .then((data) => {
+    cards = data;
+    if (!memoryGame.classList.contains('is-locked')) startMemoryGame();
   });
-});
+
+function showQuestion() {
+  const question = questions[questionNumber];
+
+  if (!question) {
+    questionText.textContent = 'Quiz finalizado!';
+    score.textContent = `Você acertou ${correctAnswers} perguntas.`;
+    restartButton.hidden = false;
+    return;
+  }
+
+  choices.innerHTML = '';
+  feedback.textContent = '';
+  nextButton.hidden = true;
+  questionText.textContent = question.pergunta;
+  score.textContent = `Pergunta ${questionNumber + 1} de ${questions.length}`;
+
+  question.alternativas.forEach((alternative) => {
+    const button = document.createElement('button');
+    button.textContent = alternative;
+    button.className = 'quiz-choice';
+    button.onclick = () => answerQuestion(alternative);
+    choices.appendChild(button);
+  });
+}
+
+function answerQuestion(answer) {
+  const question = questions[questionNumber];
+  const buttons = choices.getElementsByTagName('button');
+
+  for (let index = 0; index < buttons.length; index += 1) {
+    buttons[index].disabled = true;
+  }
+
+  if (answer === question.resposta) {
+    correctAnswers += 1;
+    feedback.textContent = 'Correto! O jogo da memória foi desbloqueado.';
+    feedback.className = 'quiz-feedback is-correct';
+    unlockMemoryGame();
+  } else {
+    feedback.textContent = `A resposta correta é: ${question.resposta}.`;
+    feedback.className = 'quiz-feedback is-incorrect';
+  }
+
+  nextButton.hidden = false;
+}
+
+function unlockMemoryGame() {
+  memoryGame.classList.remove('is-locked');
+  memoryGame.removeAttribute('aria-disabled');
+
+  if (!gameStarted && cards.length > 0) {
+    startMemoryGame();
+  }
+}
+
+function startMemoryGame() {
+  const chosenCards = cards.slice(0, 5);
+  const deck = chosenCards.concat(chosenCards);
+
+  deck.sort(() => Math.random() - 0.5);
+  memoryGrid.innerHTML = '';
+  firstCard = null;
+  pairsFound = 0;
+  locked = false;
+  gameStarted = true;
+
+  deck.forEach((card) => {
+    const button = document.createElement('button');
+    button.className = 'memoria-card';
+    button.dataset.id = card.id;
+    button.innerHTML = `<img src="${card.imagem.replace('../', '')}" alt="${card.nome}">`;
+    button.onclick = () => flipCard(button);
+    memoryGrid.appendChild(button);
+  });
+
+  memoryStatus.textContent = 'Encontre os 5 pares de heróis.';
+}
+
+function flipCard(card) {
+  if (locked || card === firstCard || card.classList.contains('is-matched')) return;
+
+  card.classList.add('is-flipped');
+
+  if (!firstCard) {
+    firstCard = card;
+    return;
+  }
+
+  if (firstCard.dataset.id === card.dataset.id) {
+    firstCard.classList.add('is-matched');
+    card.classList.add('is-matched');
+    firstCard.disabled = true;
+    card.disabled = true;
+    pairsFound += 1;
+    firstCard = null;
+
+    if (pairsFound === 5) {
+      memoryStatus.textContent = 'Parabéns! Você encontrou todos os pares.';
+    }
+    return;
+  }
+
+  locked = true;
+  const secondCard = card;
+
+  setTimeout(() => {
+    firstCard.classList.remove('is-flipped');
+    secondCard.classList.remove('is-flipped');
+    firstCard = null;
+    locked = false;
+  }, 800);
+}
+
+nextButton.onclick = () => {
+  questionNumber += 1;
+  showQuestion();
+};
+
+restartButton.onclick = () => {
+  questionNumber = 0;
+  correctAnswers = 0;
+  gameStarted = false;
+  memoryGrid.innerHTML = '';
+  memoryGame.classList.add('is-locked');
+  memoryGame.setAttribute('aria-disabled', 'true');
+  memoryStatus.textContent = 'Jogo da memória bloqueado: acerte uma pergunta para jogar.';
+  restartButton.hidden = true;
+  showQuestion();
+};
