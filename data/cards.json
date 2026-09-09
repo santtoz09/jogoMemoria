@@ -1,0 +1,52 @@
+[
+{
+    "id":1,
+    "nome":"Thor",
+    "imagem":"../assets/imagensHerois/Thor.jpeg"
+},
+{
+    "id":2,
+    "nome":"Homem de Ferro",
+    "imagem":"../assets/imagensHerois/Iron-Man.jpeg"
+},
+{
+    "id":3,
+    "nome":"Capitão América",
+    "imagem":"../assets/imagensHerois/Capitao-America.jpeg"
+},
+{
+    "id":4,
+    "nome":"Hulk",
+    "imagem":"../assets/imagensHerois/Hulk.jpeg"
+},
+{
+    "id":5,
+    "nome":"Pantera Negra",
+    "imagem":"../assets/imagensHerois/Pantera-Negra.jpeg"
+},
+{
+    "id":6,
+    "nome": "Homem Aranha",
+    "imagem":"../assets/imagensHerois/Homem-Aranha.jpeg"
+},
+{
+    "id":7,
+    "nome":"Falcão",
+    "imagem":"../assets/imagensHerois/Falcão.jpeg"
+},
+{
+    "id":8,
+    "nome": "Groot",
+    "imagem":"../assets/imagensHerois/Groot.jpeg"
+},
+{
+    "id":9,
+    "nome":"Clint",
+    "imagem":"../assets/imagensHerois/Clint.jpeg"
+},
+{
+    "id":10,
+    "nome": "Doutor Estranho",
+    "imagem":"../assets/imagensHerois/Doutor-Estranho.jpeg"
+}
+]
