@@ -26,4 +26,8 @@ button { border: 0; border-radius: 9px; padding: .8rem 1rem; font-size: 1rem; fo
 .memoria-card { aspect-ratio: 1; min-height: 70px; background: #fff; border-radius: 10px; box-shadow: 0 4px 10px #00176b66; }
 .jogo-da-memoria.is-locked .memoria-grid { opacity: .38; pointer-events: none; }
 .jogo-da-memoria.is-locked .memory-status { color: #ffd0d0; }
+@media (min-width: 768px) {
+  main { display: grid; grid-template-columns: 0.9fr 1.1fr; align-items: start; gap: 1.25rem; max-width: 1200px; }
+  .jogo-da-memoria { margin-top: 0; }
+}
 @media (max-width: 480px) { .quiz, .jogo-da-memoria { padding: 1.25rem; } .memoria-grid { gap: .4rem; } }
