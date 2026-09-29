@@ -3,32 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quiz dos Vingadores</title>
+  <title>Jogo da Memória</title>
   <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
   <main>
-    <section class="quiz" aria-labelledby="quiz-title">
-      <h1 id="quiz-title" class="quiz-title">Quiz</h1>
-      <p id="quiz-question" class="quiz-question" aria-live="polite">Carregando pergunta...</p>
-      <div id="quiz-choices" class="quiz-choices" aria-label="Alternativas da pergunta"></div>
-      <p id="quiz-feedback" class="quiz-feedback" aria-live="polite"></p>
-      <p id="quiz-score" class="quiz-score" aria-live="polite"></p>
-      <div class="quiz-actions">
-        <button id="quiz-next" type="button" hidden>Próxima pergunta</button>
-        <button id="quiz-restart" type="button" hidden>Reiniciar quiz</button>
-      </div>
-    </section>
-
-    <section id="memory-game" class="jogo-da-memoria is-locked" aria-labelledby="memory-title" aria-disabled="true">
-      <h2 id="memory-title" class="memoria-title">Jogo da Memória</h2>
-      <p id="memory-status" class="memory-status" aria-live="polite">Jogo da memória bloqueado: acerte uma pergunta para jogar.</p>
+    <section class="jogo-da-memoria" aria-labelledby="memory-title">
+      <h1 id="memory-title" class="memoria-title">Jogo da Memória</h1>
+      <p class="memory-status">Escolha duas cartas para formar um par.</p>
       <div id="memory-grid" class="memoria-grid" aria-label="Cartas do jogo da memória">
-        <div class="memoria-card" aria-hidden="true"></div><div class="memoria-card" aria-hidden="true"></div>
-        <div class="memoria-card" aria-hidden="true"></div><div class="memoria-card" aria-hidden="true"></div>
-        <div class="memoria-card" aria-hidden="true"></div><div class="memoria-card" aria-hidden="true"></div>
-        <div class="memoria-card" aria-hidden="true"></div><div class="memoria-card" aria-hidden="true"></div>
-        <div class="memoria-card" aria-hidden="true"></div><div class="memoria-card" aria-hidden="true"></div>
+        <!-- As cartas serão criadas aqui com JavaScript. -->
       </div>
     </section>
   </main>
