@@ -8,7 +8,11 @@ main { max-width: 760px; margin: 0 auto; padding: 2rem 1rem; }
 .memoria-title { font-size: 2rem; letter-spacing: 1px; }
 .memory-status { margin: 1rem 0; text-align: center; }
 .memoria-grid { display: grid; grid-template-columns: repeat(5, minmax(48px, 1fr)); width: min(100%, 600px); gap: .65rem; }
-.card { overflow: hidden; border: 2px solid #fff; background: #fff; color: #001b8f; text-align: center; }
-.card img { display: block; width: 100%; aspect-ratio: 1; object-fit: contain; }
-.card p { padding: .5rem; font-weight: 700; }
-@media (max-width: 480px) { .jogo-da-memoria { padding: 1.25rem; } .memoria-grid { gap: .4rem; } }
+.card { position: relative; min-height: 130px; padding: 0; overflow: hidden; border: 2px solid #fff; border-radius: 12px; background: linear-gradient(135deg, #ffc400, #ff8a00); color: #001b8f; cursor: pointer; box-shadow: 0 4px 10px #00176b66; }
+.card::before { content: '?'; position: absolute; inset: 0; display: grid; place-items: center; color: #fff; font-size: 3rem; font-weight: 900; }
+.card img { display: block; width: 100%; aspect-ratio: 1; object-fit: contain; background: #fff; opacity: 0; }
+.card p { padding: .5rem; font-weight: 700; opacity: 0; }
+.card.virada { background: #fff; }
+.card.virada::before { display: none; }
+.card.virada img, .card.virada p { opacity: 1; }
+@media (max-width: 480px) { .jogo-da-memoria { padding: 1.25rem; } .memoria-grid { grid-template-columns: repeat(2, 1fr); gap: .4rem; } }
