@@ -5,7 +5,12 @@ async function mostrarCartas() {
   const cartas = await resposta.json();
 
   cartas.forEach((carta) => {
-    gradeDeCartas.innerHTML += `<img src="${carta.imagem}" alt="${carta.nome}">`;
+    gradeDeCartas.innerHTML += `
+      <div class="card">
+        <img src="${carta.imagem}" alt="${carta.nome}">
+        <p>${carta.nome}</p>
+      </div>
+    `;
   });
 }
 
